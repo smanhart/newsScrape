@@ -4,7 +4,6 @@ var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
 
-require('dotenv').config()
 var db = require("./models");
 
 var PORT = 3000;
@@ -29,6 +28,53 @@ mongoose.connect(MONGODB_URI);
 
 //routes
 
+app.get("/scrape", function(req, res) {
+
+    axios.get("https://www.npr.org/sections/news/")
+        .then(function(response) {
+            var $ = cheerio.load(response.data);
+
+            $(".item-info").each(function(i, element) {
+                var result = {};
+                // console.log(element);
+
+                result.title = $(this)
+                .children("h2.title")
+                .text();
+
+                result.link = $(this)
+                .find("h2")
+                .children("a")
+                .attr("href");
+
+                result.summary = $(this)
+                .children("p.teaser")
+                .text()
+
+                db.Article.create(result)
+                    .then(function(dbentry) {
+                        console.log(dbentry)
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                    });
+            });
+
+            res.send("Scrape Complete");
+        });
+});
+
+app.get("/articles", function(req, res) {
+    db.Article.find({})
+    .then(function(dbArticle) {
+      
+      res.json(dbArticle);
+    })
+    .catch(function(err) {
+      // If an error occurs, send the error back to the client
+      res.json(err);
+    });
+});
 
 
 
