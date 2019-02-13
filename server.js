@@ -3,6 +3,7 @@ var logger = require("morgan");
 var mongoose = require("mongoose");
 var axios = require("axios");
 var cheerio = require("cheerio");
+var exphbs = require("express-handlebars");
 
 var db = require("./models");
 
@@ -20,6 +21,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 // Make public a static folder
 app.use(express.static("public"));
+app.engine("handlebars", exphbs({defaultLayout:"main"}));
+app.set("view engine", "handlebars");
 
 // Connect to the Mongo DB
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
@@ -68,7 +71,12 @@ app.get("/articles", function(req, res) {
     db.Article.find({})
     .then(function(dbArticle) {
       
-      res.json(dbArticle);
+        var articleObject = {
+            articles: dbArticle
+        }
+        console.log(articleObject);
+
+      res.render("index", articleObject);
     })
     .catch(function(err) {
       // If an error occurs, send the error back to the client
