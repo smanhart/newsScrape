@@ -68,6 +68,7 @@ app.get("/scrape", function(req, res) {
 });
 
 app.get("/articles", function(req, res) {
+    
     db.Article.find({})
     .then(function(dbArticle) {
       
@@ -75,8 +76,9 @@ app.get("/articles", function(req, res) {
             articles: dbArticle
         }
         console.log(articleObject);
-
       res.render("index", articleObject);
+
+        // res.json(dbArticle)
     })
     .catch(function(err) {
       // If an error occurs, send the error back to the client
@@ -84,6 +86,28 @@ app.get("/articles", function(req, res) {
     });
 });
 
+app.delete("/clear", function(req, res) {
+    db.Article.deleteMany({})
+    .then(function() {
+        res.end()
+    })
+})
+
+app.get("/saved", function(req, res) {
+    db.Article.find({})
+    .then(function(dbSavedArticle) {
+
+        var savedArticleObj = {
+            savedArticle: dbSavedArticle
+        }
+
+        res.render("index", savedArticleObj)
+    })
+    .catch(function(err) {
+        // If an error occurs, send the error back to the client
+        res.json(err);
+      });
+})
 
 
 
