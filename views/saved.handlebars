@@ -1,17 +1,16 @@
 <nav>
     <div class="nav-wrapper">
-        <a href="#" class="brand-logo center">NPR News Scrape</a>
+        <a href="#" class="brand-logo center">Saved Articles</a>
     </div>
 </nav>
 <div class="row">
     <div class="col s3 nav">
         <div class="nav-wrapper">
-            <a href="#" class="brand-logo center">NPR New Scrape</a>
+            <a href="#" class="brand-logo center">NPR News Scrape</a>
             <ul id="nav-mobile" class="left hide-on-med-and-down">
                 <li><a href="/articles">Home</a></li>
                 <li><a href="/saved">Saved Articles</a></li>
             </ul>
-            {{>buttons/scrape}}
             {{>buttons/clear}}
         </div>
     </div>
@@ -20,16 +19,17 @@
     <div class="col s9 main">
         <div class="row">
             <div class="col s12" id="articles">
-               {{#if articles}}
-                {{#each articles}}
-                    {{#unless isSaved}}
-                        {{>unsavedArt }}
-                    {{/unless}}
+               {{#if savedArticle}}
+                {{#each savedArticle}}
+                    {{#if isSaved}}
+                        {{>savedArt }}
+                    {{/if}}
                 {{/each}}
                 {{else}}
                     <div class="card-panel teal">
                     <span class="white-text">
-                       It looks like there are no articles currently, hit the scrape button to the left to get some new ones!
+                       There are no saved articles.
+                       <a href="/articles">Browse available articles</a>
                     </span>
                 {{/if}}
             </div>

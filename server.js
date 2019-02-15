@@ -31,6 +31,10 @@ mongoose.connect(MONGODB_URI);
 
 //routes
 
+app.get("/", function(req, res) {
+    res.render("index")
+});
+
 app.get("/scrape", function(req, res) {
 
     axios.get("https://www.npr.org/sections/news/")
@@ -67,6 +71,7 @@ app.get("/scrape", function(req, res) {
         });
 });
 
+
 app.get("/articles", function(req, res) {
     
     db.Article.find({})
@@ -86,12 +91,14 @@ app.get("/articles", function(req, res) {
     });
 });
 
+
 app.delete("/clear", function(req, res) {
     db.Article.deleteMany({})
     .then(function() {
         res.end()
     })
 })
+
 
 app.get("/saved", function(req, res) {
     db.Article.find({})
@@ -100,13 +107,24 @@ app.get("/saved", function(req, res) {
         var savedArticleObj = {
             savedArticle: dbSavedArticle
         }
-
-        res.render("index", savedArticleObj)
+        console.log(savedArticleObj);
+        res.render("saved", savedArticleObj)
     })
     .catch(function(err) {
         // If an error occurs, send the error back to the client
         res.json(err);
       });
+})
+
+
+app.put("/saved/:id", function(req, res) {
+    db.Article.findOneAndUpdate({ _id: req.params.id }, { isSaved: req.body.isSaved })
+    .then(function(result) {
+
+        res.send("Entry Updated")
+    })
+    
+    
 })
 
 

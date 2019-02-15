@@ -47,11 +47,16 @@ $(".clear").on("click", function() {
 
 
 $(".save-article").on("click", function(event) {
+  event.preventDefault();
+
   var id = $(this).data("id");
-  var isSaved = $(this).data("saved");
+  // var nowSaved = $(this).data("saved");
+
+  console.log(id);
+  // console.log(nowSaved)
 
   var newSaveState = {
-    saved: isSaved
+    isSaved: true
   };
 
   // Send the PUT request.
@@ -59,8 +64,33 @@ $(".save-article").on("click", function(event) {
     type: "PUT",
     data: newSaveState
   }).then(
-    function() {
-      console.log("changed save state to", isSaved);
+    function(data) {
+      // Reload the page to get the updated list
+      location.reload();
+    }
+  );
+});
+
+
+$(".unsave-article").on("click", function(event) {
+  event.preventDefault();
+
+  var id = $(this).data("id");
+  // var nowSaved = $(this).data("saved");
+
+  console.log(id);
+  // console.log(nowSaved)
+
+  var newSaveState = {
+    isSaved: false
+  };
+
+  // Send the PUT request.
+  $.ajax("/saved/" + id, {
+    type: "PUT",
+    data: newSaveState
+  }).then(
+    function(data) {
       // Reload the page to get the updated list
       location.reload();
     }
