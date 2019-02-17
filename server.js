@@ -7,7 +7,7 @@ var exphbs = require("express-handlebars");
 
 var db = require("./models");
 
-var PORT = 3000;
+var PORT = process.env.PORT || 3000;
 
 // Initialize Express
 var app = express();
@@ -33,7 +33,7 @@ mongoose.connect(MONGODB_URI);
 
 app.get("/", function(req, res) {
     
-    res.redirect("/articles")
+    res.render("")
 });
 
 //scrape news site for articles
