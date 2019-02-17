@@ -1,10 +1,14 @@
-<div class="card-panel teal">
-    <span class="white-text">
-       <a href={{this.link}}>{{this.title}}</a> 
-        {{this.summary}}
-
-    </span>
-    <button class="save-article" data-id="{{this.id}}">
-        Save This Article
-    </button>
+<div class="card horizontal">
+    <div class="card-image">
+        <img src="{{this.picture}}">
+    </div>
+    <div class="card-stacked">
+        <div class="card-content">
+            <span class="card-title"><a class="articleLink" href={{this.link}} target="_blank">{{this.title}}</a></span>
+            <p>{{this.summary}}</p>
+        </div>
+        <div class="card-action">
+            <a class="waves-effect waves-light btn-flat save-article" data-id="{{this.id}}">Save This Article</a>
+        </div>
+    </div>
 </div>

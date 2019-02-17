@@ -1,0 +1,13 @@
+<div id="modal1" class="modal">
+    <div class="modal-content">
+        {{#if data}}
+            <h4>{{data.title}}</h4>
+            <p>{{data.note}}</p>
+        {{else}}
+            <p>There are no comments for this article.</p>
+        {{/if}}
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+</div>

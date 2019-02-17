@@ -1,10 +1,23 @@
-<nav>
-    <div class="nav-wrapper">
-        <a href="#" class="brand-logo center">NPR News Scrape</a>
+<div class="navbar-fixed">
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">NPR News Scrape</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li class="active"><a href="/articles">Home</a></li>
+                <li><a href="/saved">Saved Articles</a></li>
+                <li>{{>buttons/scrape}}</li>
+                <li>{{>buttons/clear}}</li>
+            </ul>
+        </div>
+    </nav>
+</div>
+{{!-- <div class="row">
+    <div class="col s12">
+        <img class="header-image" src="/assets/Images/pexels-photo-518543.jpeg" />
     </div>
-</nav>
+</div> --}}
 <div class="row">
-    <div class="col s3 nav">
+    {{!-- <div class="col s4 nav">
         <div class="nav-wrapper">
             <a href="#" class="brand-logo center">NPR New Scrape</a>
             <ul id="nav-mobile" class="left hide-on-med-and-down">
@@ -14,24 +27,33 @@
             {{>buttons/scrape}}
             {{>buttons/clear}}
         </div>
-    </div>
+    </div> --}}
 
-
-    <div class="col s9 main">
-        <div class="row">
-            <div class="col s12" id="articles">
-               {{#if articles}}
-                {{#each articles}}
-                    {{#unless isSaved}}
-                        {{>unsavedArt }}
-                    {{/unless}}
-                {{/each}}
-                {{else}}
-                    <div class="card-panel teal">
-                    <span class="white-text">
-                       It looks like there are no articles currently, hit the scrape button to the left to get some new ones!
-                    </span>
-                {{/if}}
+    <div class="container">
+        <div class="col s12 main">
+            <div class="row">
+                <div class="col s12" id="articles">
+                    {{#if articles}}
+                        {{#each articles}}
+                            {{#unless isSaved}}
+                                {{>unsavedArt }}
+                            {{/unless}}
+                        {{/each}}
+                    {{else}}
+                        <div class="card horizontal">
+                            <div class="card-image">
+                                <img src="/assets/Images/pexels-photo-518543.jpeg">
+                            </div>
+                            <div class="card-stacked">
+                                <div class="card-content center-align">
+                                   <span>
+                                    It looks like there are no articles currently, hit the "Get New Articles" button above to load more!
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    {{/if}}
+                </div>
             </div>
         </div>
     </div>

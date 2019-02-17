@@ -32,21 +32,34 @@ mongoose.connect(MONGODB_URI);
 //routes
 
 app.get("/", function(req, res) {
-    res.render("index")
+    
+    res.redirect("/articles")
 });
 
+//scrape news site for articles
 app.get("/scrape", function(req, res) {
 
     axios.get("https://www.npr.org/sections/news/")
         .then(function(response) {
             var $ = cheerio.load(response.data);
 
-            $(".item-info").each(function(i, element) {
+            $("article.item.has-image").each(function(i, element) {
                 var result = {};
                 // console.log(element);
 
+                result.picture = $(this)
+                .children(".item-image")
+                .find("img")
+                .attr("src")
+
+                // result.credit = $(this)
+                // .children(".item-image")
+                // .find("span.credit")
+                // .text();
+
                 result.title = $(this)
-                .children("h2.title")
+                .children(".item-info-wrap")
+                .find("h2.title")
                 .text();
 
                 result.link = $(this)
@@ -55,12 +68,15 @@ app.get("/scrape", function(req, res) {
                 .attr("href");
 
                 result.summary = $(this)
-                .children("p.teaser")
+                .children(".item-info-wrap")
+                .find("p.teaser")
                 .text()
+
+                console.log(result)
 
                 db.Article.create(result)
                     .then(function(dbentry) {
-                        console.log(dbentry)
+                        // console.log(dbentry)
                     })
                     .catch(function(err) {
                         console.log(err);
@@ -71,7 +87,7 @@ app.get("/scrape", function(req, res) {
         });
 });
 
-
+//find all articles in database
 app.get("/articles", function(req, res) {
     
     db.Article.find({})
@@ -80,8 +96,10 @@ app.get("/articles", function(req, res) {
         var articleObject = {
             articles: dbArticle
         }
-        console.log(articleObject);
+        // console.log(articleObject);
       res.render("index", articleObject);
+        // res.json(articleObject);
+        // res.redirect("/", articleObject);
 
         // res.json(dbArticle)
     })
@@ -91,7 +109,7 @@ app.get("/articles", function(req, res) {
     });
 });
 
-
+//delete all articles in database
 app.delete("/clear", function(req, res) {
     db.Article.deleteMany({})
     .then(function() {
@@ -99,7 +117,7 @@ app.delete("/clear", function(req, res) {
     })
 })
 
-
+//get all articles marked as saved
 app.get("/saved", function(req, res) {
     db.Article.find({})
     .then(function(dbSavedArticle) {
@@ -116,7 +134,7 @@ app.get("/saved", function(req, res) {
       });
 })
 
-
+//update saved status on article
 app.put("/saved/:id", function(req, res) {
     db.Article.findOneAndUpdate({ _id: req.params.id }, { isSaved: req.body.isSaved })
     .then(function(result) {
@@ -125,6 +143,48 @@ app.put("/saved/:id", function(req, res) {
     })
     
     
+})
+
+//get article by id and populate with note
+app.get("/saved/:id", function(req, res) {
+    console.log("Server side id", req.params.id)
+    db.Article.findById(req.params.id )
+      .populate("note")
+      .then(function(dbSavedWithNote) {
+
+        // var savedWithNoteObj = {
+        //     savedWithNote: dbSavedWithNote
+        // }
+        
+        // res.render("saved", savedWithNoteObj)
+        // console.log(dbSavedWithNote)
+          res.json(dbSavedWithNote)
+      })
+      .catch(function(err) {
+        // If an error occurs, send it back to the client
+        res.json(err);
+      });
+})
+
+//creates note in Note db, then links with Article db
+app.post("/saved/:id", function(req, res) {
+    console.log("req.body", req.body)
+    db.Note.create(req.body)
+    .then(function(dbNote){
+        return db.Article.findOneAndUpdate(
+            {_id:req.params.id}, 
+            { $push: { note: dbNote._id }}, 
+            { new: true })
+            .populate("note")
+    })
+    
+    .then(function(dbArticle) {
+        res.json(dbArticle)
+    })
+    .catch(function(err) {
+        // If an error occurs, send it back to the client
+        res.json(err);
+      });
 })
 
 

@@ -3,10 +3,14 @@ var Schema = mongoose.Schema;
 
 var ArticleSchema = new Schema({
 
+    picture: {
+        type: String,
+
+    },
     title: {
         type: String,
         required: true,
-        // unique: true
+        unique: true
     },
     link: {
         type: String,
@@ -18,6 +22,9 @@ var ArticleSchema = new Schema({
     isSaved: {
         type: Boolean,
         default: false
+    },
+    date: {
+        date: Date
     },
     note: [{
         type: Schema.Types.ObjectId,

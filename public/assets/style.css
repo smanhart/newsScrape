@@ -1,11 +1,32 @@
-.nav {
-    background-color: cadetblue;
+.nav-wrapper {
+    padding-bottom: 20px;
 }
 
-.main {
-    background-color: darkolivegreen;
+nav {
+    background-color: #324258;
 }
 
-a {
-    color: black;
+body {
+    background: url(../assets/Images/hip-square.png);
+    background-attachment: fixed;
 }
+
+.articleLink {
+    color: #324258;
+}
+
+.btn {
+    background-color: #ffab40;
+    color: white;
+}
+
+.btn:hover {
+    background-color: #f19318;
+}
+
+.card.horizontal .card-image img {
+    width: 300px;
+}
+
+.card
+
