@@ -24,8 +24,9 @@ var ArticleSchema = new Schema({
         default: false
     },
     date: {
-        date: Date
-    },
+        type: Date,
+        default: Date.now
+      },
     note: [{
         type: Schema.Types.ObjectId,
         ref: "Note"

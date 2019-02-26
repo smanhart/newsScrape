@@ -33,7 +33,7 @@ mongoose.connect(MONGODB_URI);
 
 app.get("/", function(req, res) {
     
-    res.render("")
+    res.redirect("/articles")
 });
 
 //scrape news site for articles
@@ -90,7 +90,7 @@ app.get("/scrape", function(req, res) {
 //find all articles in database
 app.get("/articles", function(req, res) {
     
-    db.Article.find({})
+    db.Article.find({}).sort({date: -1})
     .then(function(dbArticle) {
       
         var articleObject = {
